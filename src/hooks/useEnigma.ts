@@ -9,6 +9,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'reward',
         status: 'completed',
         lockedBy: [],
+        icon: 'eye',
     },
     {
         id: 'tutorial',
@@ -23,7 +24,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         title: 'Magia.',
         url: '/tecnologia',
         type: 'enigma',
-        status: 'unlocked',
+        status: 'locked',
         lockedBy: ['tutorial'],
     },
     {
@@ -100,7 +101,6 @@ export const useEnigma = () => {
 
         let complete = false
         while (!complete) {
-            debugger
             if (nodes.filter(e => e.rank === undefined).length === 0) {
                 complete = true
                 break

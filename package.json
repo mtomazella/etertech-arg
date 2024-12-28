@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@types/d3-force": "^3.0.10",
+    "@visx/clip-path": "^3.12.0",
+    "@visx/event": "^3.12.0",
     "@visx/group": "^3.12.0",
     "@visx/mock-data": "^3.12.0",
     "@visx/network": "^3.12.0",

@@ -11,4 +11,5 @@ export type EnigmaNode = {
     lockedBy: EnigmaId[]
     unlocks?: EnigmaId[]
     rank?: number
+    icon?: string
 }
