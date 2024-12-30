@@ -12,4 +12,5 @@ export type EnigmaNode = {
     unlocks?: EnigmaId[]
     rank?: number
     icon?: string
+    tooltip?: string
 }

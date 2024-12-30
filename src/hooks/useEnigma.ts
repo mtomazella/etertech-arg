@@ -18,6 +18,16 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'unlocked',
         lockedBy: ['initial'],
+        tooltip: 'Começo.',
+        // inicio
+    },
+    {
+        id: 'tutorial-reward',
+        url: '/tutorial',
+        title: 'Conhecimento.',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['tutorial'],
     },
     {
         id: 'what-is-ethertech',
@@ -26,6 +36,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['tutorial'],
+        // etertech
     },
     {
         id: 'nyctography',
@@ -34,6 +45,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['what-is-ethertech'],
+        // abducao
     },
     {
         id: 'morse-binary',
@@ -42,6 +54,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['nyctography'],
+        // supressao
     },
     {
         id: 'god',
@@ -50,6 +63,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['nyctography'],
+        // experimento
     },
     {
         id: 'cli',
@@ -58,12 +72,22 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['morse-binary', 'god'],
+        // objetivo
     },
     {
         id: 'roll20',
         title: 'Olhe.',
         url: '/20',
         type: 'enigma',
+        status: 'locked',
+        lockedBy: ['cli'],
+        // ascensao
+    },
+    {
+        id: 'roll20',
+        title: 'Plano.',
+        url: '/vulnerabilidade',
+        type: 'reward',
         status: 'locked',
         lockedBy: ['cli'],
     },
@@ -74,6 +98,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['cli'],
+        // destruicao
     },
     {
         id: 'melody',
@@ -82,6 +107,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['blank', 'roll20'],
+        // salvacao
     },
     {
         id: 'email',
@@ -90,14 +116,39 @@ const enigmaNodesInitial: EnigmaNode[] = [
         type: 'enigma',
         status: 'locked',
         lockedBy: ['melody'],
+        // ajuda
     },
 ]
 
 export const useEnigma = () => {
     const [enigmaNodes, setEnigmaNodes] = useState<EnigmaNode[]>([])
 
+    const getSaved = (): EnigmaNode[] => {
+        let saved = localStorage.getItem('enigmaNodes')
+
+        if (!saved) saved = '[]'
+
+        let parsed
+        try {
+            parsed = JSON.parse(saved)
+        } catch (error) {
+            console.error('Dados corrompidos.', { saved, error })
+            parsed = []
+        }
+
+        const nodes = enigmaNodesInitial.map(e => {
+            const savedNode = parsed.find((n: EnigmaNode) => n.id === e.id)
+            return savedNode ? { ...e, ...savedNode } : e
+        })
+
+        return nodes
+    }
+
     const getEnigmaNodes: () => EnigmaNode[] = useCallback(() => {
-        let nodes = enigmaNodesInitial.map(e => ({ ...e, rank: e.lockedBy.length == 0 ? 0 : undefined }))       
+        let nodes = getSaved().map(e => ({
+            ...e,
+            rank: e.lockedBy.length == 0 ? 0 : undefined,
+        }))
 
         let complete = false
         while (!complete) {
@@ -107,9 +158,13 @@ export const useEnigma = () => {
             }
             for (const node of nodes) {
                 if (node.rank !== undefined) continue
-                const lockedByNodes = nodes.filter(e => node.lockedBy.includes(e.id))
-                if (lockedByNodes.filter(e => e.rank === undefined).length > 0) continue
-                node.rank = Math.min(...lockedByNodes.map(e => e.rank as number)) + 1
+                const lockedByNodes = nodes.filter(e =>
+                    node.lockedBy.includes(e.id)
+                )
+                if (lockedByNodes.filter(e => e.rank === undefined).length > 0)
+                    continue
+                node.rank =
+                    Math.min(...lockedByNodes.map(e => e.rank as number)) + 1
             }
         }
 
@@ -121,16 +176,71 @@ export const useEnigma = () => {
         return nodes
     }, [enigmaNodesInitial])
 
-    const updateEnigmaNodes = useCallback(() => {
-        setEnigmaNodes(getEnigmaNodes())
+    const getUnlocked = (nodes: EnigmaNode[]) => {
+        let complete = false
+        while (!complete) {
+            complete = true
+            for (const node of nodes) {
+                if (node.status !== 'completed') continue
+                for (const id of node.unlocks ?? []) {
+                    const unlockedNode = nodes.find(e => e.id === id)
+                    if (unlockedNode?.status === 'locked') {
+                        unlockedNode.status = 'unlocked'
+                        complete = false
+                    }
+                }
+            }
+        }
+        return nodes
+    }
+
+    const saveEnigmaNodes = (nodes: EnigmaNode[]) => {
+        localStorage.setItem(
+            'enigmaNodes',
+            JSON.stringify(
+                nodes.map(e => {
+                    const {
+                        rank,
+                        icon,
+                        url,
+                        lockedBy,
+                        title,
+                        unlocks,
+                        type,
+                        ...toSave
+                    } = e
+                    return toSave
+                })
+            )
+        )
+    }
+
+    const syncEnigmaNodes = useCallback(() => {
+        let nodes = getEnigmaNodes()
+        nodes = getUnlocked(nodes)
+        setEnigmaNodes(nodes)
+        saveEnigmaNodes(nodes)
     }, [getEnigmaNodes])
 
+    const updateEnigma = useCallback(
+        (node: Partial<EnigmaNode>) => {
+            if (!node.id) return
+            let nodes = getEnigmaNodes()
+            nodes = nodes.map(e => (e.id === node.id ? { ...e, ...node } : e))
+            setEnigmaNodes(nodes)
+            saveEnigmaNodes(nodes)
+        },
+        [getEnigmaNodes, saveEnigmaNodes, setEnigmaNodes]
+    )
+
     useEffect(() => {
-        updateEnigmaNodes()
+        syncEnigmaNodes()
     }, [])
 
     return {
         enigmaNodes,
-        updateEnigmaNodes,
+        syncEnigmaNodes,
+        saveEnigmaNodes,
+        updateEnigma,
     }
 }

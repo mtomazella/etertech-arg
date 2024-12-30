@@ -1,17 +1,14 @@
 'use client'
 
 import { useEnigma } from '@/hooks/useEnigma'
-import { EnigmaNode, PageStatus, PageType } from '@/types'
+import { EnigmaNode } from '@/types'
+import { Tooltip } from '@mui/material'
 import { localPoint } from '@visx/event'
 import { Group } from '@visx/group'
 import { Graph } from '@visx/network'
-import {
-    DefaultNode as DefaultNodeType,
-    Link as LinkType,
-} from '@visx/network/lib/types'
+import { DefaultNode as DefaultNodeType } from '@visx/network/lib/types'
 import { ParentSize } from '@visx/responsive'
 import { Zoom } from '@visx/zoom'
-import { clear } from 'console'
 import React, { useCallback, useEffect, useMemo } from 'react'
 
 const Circle = ({
@@ -20,6 +17,9 @@ const Circle = ({
     type,
     setHoveringNode,
     id,
+    icon,
+    tooltip,
+    title
 }: Node & { setHoveringNode: (id: string | null) => null }) => {
     let style: {
         fill?: string
@@ -52,28 +52,25 @@ const Circle = ({
     }
 
     return (
-        <a
-            href={url}
-            onMouseEnter={() => setHoveringNode(id)}
-            onMouseLeave={() => setHoveringNode(null)}
-        >
-            <circle
-                r={20}
-                fill={style.fill ?? backgroundColor}
-                stroke={style.border}
-                strokeWidth={4}
-            ></circle>
-        </a>
+        <Tooltip title={tooltip ?? title}>
+            <a
+                href={url}
+                onMouseEnter={() => setHoveringNode(id)}
+                onMouseLeave={() => setHoveringNode(null)}
+            >
+                <circle
+                    r={20}
+                    fill={style.fill ?? backgroundColor}
+                    stroke={style.border}
+                    strokeWidth={4}
+                >
+                </circle>
+            </a>
+        </Tooltip>
     )
 }
 
 type Node = DefaultNodeType & EnigmaNode
-
-// const nodes: Node[] = [
-//     { x: 400, y: 100, url: '/home', type: 'enigma', status: 'completed' },
-//     { x: 200, y: 400, url: '/home', type: 'enigma', status: 'unlocked' },
-//     { x: 600, y: 400, url: '/home', type: 'enigma', status: 'locked' },
-// ]
 
 export default () => {
     const { enigmaNodes } = useEnigma()
@@ -91,8 +88,6 @@ export default () => {
                 const y = Math.sin(randomAngle) * randomRadius
 
                 return {
-                    // y: (node.rank ?? 0 + 1) * 300,
-                    // x: (nodesInRank.length) * 100,
                     x,
                     y,
                     ...node,
@@ -105,7 +100,7 @@ export default () => {
     const moveNodes = useCallback(() => {
         if (hoveringNode) {
             setJitterSpeed(1000)
-            } else {
+        } else {
             setJitterSpeed(10)
         }
         const newNodes = nodes.map(node => {
@@ -122,6 +117,10 @@ export default () => {
     }, [nodes, setNodes, hoveringNode])
 
     useEffect(() => {
+        document.title = 'Hub.'
+    })
+
+    useEffect(() => {
         if (nodes.length === 0) generateNodes()
     }, [enigmaNodes, generateNodes, nodes])
 
@@ -130,7 +129,6 @@ export default () => {
         return () => {
             clearInterval(interval)
         }
-
     }, [enigmaNodes, moveNodes, jitterSpeed, hoveringNode])
 
     const graph = useMemo(() => {
