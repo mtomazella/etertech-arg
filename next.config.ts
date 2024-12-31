@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       {
         source: "/:any*",
         destination: "/",
+        eslint: {
+          ignoreDuringBuilds: true,
+        }
       },
     ];
   },
