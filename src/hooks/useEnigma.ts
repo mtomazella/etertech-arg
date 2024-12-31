@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { EnigmaNode } from '../types'
 
 const enigmaNodesInitial: EnigmaNode[] = [
-    {
+    { // 0
         id: 'initial',
         url: '/',
         title: 'Conectado.',
@@ -11,7 +11,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: [],
         icon: 'eye',
     },
-    {
+    { // 1
         id: 'tutorial',
         url: '/substitua-aqui',
         title: 'A senha é "incio".',
@@ -21,7 +21,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         tooltip: 'Começo.',
         // inicio
     },
-    {
+    { // 1
         id: 'tutorial-reward',
         url: '/tutorial',
         title: 'Conhecimento.',
@@ -29,7 +29,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         status: 'locked',
         lockedBy: ['tutorial'],
     },
-    {
+    { // 2
         id: 'what-is-ethertech',
         title: 'Magia.',
         url: '/tecnologia',
@@ -38,7 +38,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['tutorial'],
         // etertech
     },
-    {
+    { // 3
         id: 'nyctography',
         title: 'Lewis Carroll.',
         url: '/noite',
@@ -47,7 +47,15 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['what-is-ethertech'],
         // abducao
     },
-    {
+    { // 3
+        id: 'conectado',
+        title: 'Conectado.',
+        url: '/conectado',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['what-is-ethertech'],
+    },
+    { // 4
         id: 'morse-binary',
         title: 'Nem tudo é o que parece.',
         url: '/distracao',
@@ -56,7 +64,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['nyctography'],
         // supressao
     },
-    {
+    { // 4
         id: 'god',
         title: 'Oniciencia.',
         url: '/deus',
@@ -65,7 +73,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['nyctography'],
         // experimento
     },
-    {
+    { // 5
         id: 'cli',
         title: 'Peça ajuda.',
         url: '/navegue',
@@ -74,7 +82,15 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['morse-binary', 'god'],
         // objetivo
     },
-    {
+    { // 5
+        id: 'conectado-abducao',
+        title: 'Abdução.',
+        url: '/destino',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['morse-binary', 'god'],
+    },
+    { // 6
         id: 'roll20',
         title: 'Olhe.',
         url: '/20',
@@ -83,7 +99,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['cli'],
         // ascensao
     },
-    {
+    { // 6
         id: 'roll20',
         title: 'Plano.',
         url: '/vulnerabilidade',
@@ -91,32 +107,56 @@ const enigmaNodesInitial: EnigmaNode[] = [
         status: 'locked',
         lockedBy: ['cli'],
     },
-    {
+    { // 6
         id: 'blank',
-        title: '.',
-        url: '/_',
+        title: 'Dentro.',
+        url: '/codigo',
         type: 'enigma',
         status: 'locked',
         lockedBy: ['cli'],
         // destruicao
     },
-    {
+    { // 7
         id: 'melody',
         title: 'Helmholtz.',
         url: '/melodia',
         type: 'enigma',
         status: 'locked',
         lockedBy: ['blank', 'roll20'],
-        // salvacao
+        // cabeca
     },
-    {
+    { // 8
+        id: 'elite',
+        title: 'Elite.',
+        url: '/elite',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['blank', 'roll20'],
+    },
+    { // 8
         id: 'email',
         title: 'Envie.',
         url: '/envie',
         type: 'enigma',
         status: 'locked',
         lockedBy: ['melody'],
-        // ajuda
+        // salvacao
+    },
+    { // 9
+        id: 'facility',
+        title: 'Chance.',
+        url: '/chance',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['email'],
+    },
+    { // 9
+        id: 'isis',
+        title: 'Isis.',
+        url: '/isis',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['email'],
     },
 ]
 
@@ -198,7 +238,7 @@ export const useEnigma = () => {
         localStorage.setItem(
             'enigmaNodes',
             JSON.stringify(
-                nodes.map(e => {
+                nodes.filter(e => e.status === 'completed').map(e => {
                     const {
                         rank,
                         icon,

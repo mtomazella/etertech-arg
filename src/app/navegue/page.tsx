@@ -1,7 +1,6 @@
 'use client'
 
 import { useEnigma } from '@/hooks/useEnigma'
-import { get } from 'http'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 type CliState = {
@@ -14,6 +13,7 @@ type File = {
     name: string
     type: 'file' | 'directory'
     content: string | FileSystem
+    password?: string
 }
 type FileSystem = Record<string, File>
 type Environment = {
@@ -83,6 +83,7 @@ const generateEnvironment = (): Environment => {
                     name: 'lozinka.txt',
                     type: 'file',
                     content: 'objetivo',
+                    password: '6432',
                 },
                 ...maze,
             },
@@ -149,6 +150,8 @@ const Tutorial = () => {
                 'É possível voltar um diretório com o comando cd ..',
                 '- ls: Lista os arquivos e diretórios do diretório atual e informa o caminho completo.',
                 '- cat: Recebe o nome de um arquivo como parâmetro e exibe seu conteúdo. Exemplo: cat arquivo.txt',
+                'Alguns arquivos são protegidos por senha. Use a flag -p ou -password para informar a senha do arquivo.',
+                'Exemplo: cat arquivo.txt -p senha',
             ],
             cliState,
         }
@@ -286,6 +289,111 @@ const Tutorial = () => {
         }
     }
 
+    const cat: CommandHandler = ({
+        params: rawParams,
+        cliState,
+        environment,
+    }) => {
+        const currentDir = getDirectory(
+            cliState.directory,
+            environment as Environment
+        )
+
+        const params: Record<string, string | null> = {
+            directory: null,
+            password: null,
+        }
+        let nextFlag = null
+        for (const param of rawParams) {
+            const value = param.trim()
+
+            if (!value) {
+                continue
+            }
+
+            if (value.startsWith('-')) {
+                nextFlag = value.slice(1)
+                continue
+            }
+
+            if (nextFlag) {
+                if (nextFlag === 'p' || nextFlag === 'password') {
+                    params.password = value
+                    nextFlag = null
+                    continue
+                }
+
+                return {
+                    output: [`Flag ${nextFlag} não reconhecida.`],
+                    cliState,
+                    status: 'error',
+                }
+            }
+
+            params.directory = value
+        }
+
+        if (!params.directory) {
+            return {
+                output: ['Arquivo não informado.'],
+                cliState,
+                status: 'error',
+            }
+        }
+
+        const file = (currentDir.content as FileSystem)[params.directory]
+        if (!file) {
+            return {
+                output: [`Arquivo ${params.directory} não encontrado.`],
+                cliState,
+                status: 'error',
+            }
+        }
+
+        if (file.password && !params.password) {
+            return {
+                output: [
+                    'Esse arquivo está protegido por senha.',
+                    'Use a flag -p ou -password para informar a senha do arquivo.',
+                    'Exemplo: cat arquivo.txt -p senha',
+                ],
+                cliState,
+                status: 'error',
+            }
+        }
+
+        debugger
+        if (file.password && file.password !== params.password) {
+            return {
+                output: ['Senha incorreta.'],
+                cliState,
+                status: 'error',
+            }
+        }
+
+        if (!file.content) {
+            return {
+                output: ['Arquivo vazio.'],
+                cliState,
+                status: 'error',
+            }
+        }
+
+        if (file.type !== 'file') {
+            return {
+                output: ['Não é possível exibir o conteúdo de um diretório.'],
+                cliState,
+                status: 'error',
+            }
+        }
+
+        return {
+            output: [file.content as string],
+            cliState,
+            status: 'success',
+        }
+    }
+
     const handleCli = useCallback(
         (input: string) => {
             let newDisplay = [...display]
@@ -301,6 +409,7 @@ const Tutorial = () => {
                 ajuda: help,
                 cd: cdMultiple,
                 ls,
+                cat,
             }
 
             if (commands[command]) {

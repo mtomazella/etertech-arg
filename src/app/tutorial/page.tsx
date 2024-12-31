@@ -40,8 +40,11 @@ const Tutorial = () => {
                 <br />
                 <p>
                     Esse método vai me deixar acessar qualquer informação que eu
-                    quiser. É só eu encontrar a senha e da página, colocar na
-                    URL e eu libero o acesso para outras partes da rede.
+                    quiser.
+                </p>
+                <p>
+                    É só eu encontrar a senha da página, colocar na URL e eu
+                    libero o acesso para outras partes da rede.
                 </p>
                 <p>Se eu continuar com certeza eu vou achar alguma coisa.</p>
                 <br />
