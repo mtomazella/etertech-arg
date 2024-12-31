@@ -83,12 +83,20 @@ const enigmaNodesInitial: EnigmaNode[] = [
         // objetivo
     },
     { // 5
-        id: 'conectado-abducao',
-        title: 'Abdução.',
-        url: '/destino',
+        id: 'conectado2',
+        title: 'Capacidades.',
+        url: '/capacidades',
         type: 'reward',
         status: 'locked',
         lockedBy: ['morse-binary', 'god'],
+    },
+    { // 5.1
+        id: 'memory',
+        title: 'Memoria.',
+        url: '/memoria',
+        type: 'reward',
+        status: 'locked',
+        lockedBy: ['conectado2'],
     },
     { // 6
         id: 'roll20',
@@ -100,7 +108,7 @@ const enigmaNodesInitial: EnigmaNode[] = [
         // ascensao
     },
     { // 6
-        id: 'roll20',
+        id: 'plan',
         title: 'Plano.',
         url: '/vulnerabilidade',
         type: 'reward',
@@ -151,9 +159,9 @@ const enigmaNodesInitial: EnigmaNode[] = [
         lockedBy: ['email'],
     },
     { // 9
-        id: 'isis',
-        title: 'Isis.',
-        url: '/isis',
+        id: 'ismas',
+        title: 'Ismas.',
+        url: '/ismas',
         type: 'reward',
         status: 'locked',
         lockedBy: ['email'],

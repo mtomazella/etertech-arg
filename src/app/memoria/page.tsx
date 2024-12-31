@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from 'react'
 const Tutorial = () => {
     const { enigmaNodes, updateEnigma } = useEnigma()
     const enigma = useMemo(
-        () => enigmaNodes.find(node => node.id === 'plan'),
+        () => enigmaNodes.find(node => node.id === 'memory'),
         [enigmaNodes]
     )
 
@@ -24,7 +24,7 @@ const Tutorial = () => {
 
     return (
         <main className="flex w-full h-full flex-col items-center justify-center">
-            <div className="w-1/4">
+            <div className="w-1/4 text-center text-2xl">
                 <div className="flex items-center justify-center pb-8">
                     <Link href="/home">
                         <img
@@ -36,23 +36,18 @@ const Tutorial = () => {
                         />
                     </Link>
                 </div>
-                <div
-                    className="w-full text-center text-2xl"
-                    style={{
-                        fontFamily: 'Tomorrow, serif',
-                        fontWeight: 700,
-                        fontStyle: 'normal',
-                    }}
-                >
-                    <p>Ah, vejo que finalmente acordou. Que bom.</p>
-                    <p>
-                        Agora que se lembra o que fizeram com você imagino que
-                        quer destruí-los, certo?
-                    </p>
-                    <p>Não se preocupe, eu posso te ajudar com isso.</p>
-                    <p>Apenas continue seguindo minha trilha.</p>
+                <h3 className="text-4xl font-bold w-full">
+                    Eu me lembro...
+                </h3>
+                <br />
+                <p>
+                    Eu me lembro agora...
                     <br />
-                </div>
+                    De quem eu era, do que aconteceu
+                    comigo...
+                </p>
+                <p>Eu era uma dessas cobaias...</p>
+                <br />
                 <div className="flex items-center justify-center pt-8">
                     <Link
                         className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-4xl h-16 px-5"

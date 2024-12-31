@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from 'react'
 const Tutorial = () => {
     const { enigmaNodes, updateEnigma } = useEnigma()
     const enigma = useMemo(
-        () => enigmaNodes.find(node => node.id === 'plan'),
+        () => enigmaNodes.find(node => node.id === 'facility'),
         [enigmaNodes]
     )
 
@@ -24,7 +24,7 @@ const Tutorial = () => {
 
     return (
         <main className="flex w-full h-full flex-col items-center justify-center">
-            <div className="w-1/4">
+            <div className="w-1/2">
                 <div className="flex items-center justify-center pb-8">
                     <Link href="/home">
                         <img
@@ -44,19 +44,37 @@ const Tutorial = () => {
                         fontStyle: 'normal',
                     }}
                 >
-                    <p>Ah, vejo que finalmente acordou. Que bom.</p>
                     <p>
-                        Agora que se lembra o que fizeram com você imagino que
-                        quer destruí-los, certo?
+                        Para parar tudo isso temos que destruir Ismas, não
+                        existe outro jeito. Mas não vai ser fácil. Por sorte eu
+                        tenho informações que vão tornar isso pelo menos
+                        possível.
                     </p>
-                    <p>Não se preocupe, eu posso te ajudar com isso.</p>
-                    <p>Apenas continue seguindo minha trilha.</p>
+                    <p>
+                        Seu núcleo está no centro da sede da Manacorp, mas
+                        existem outros dois módulos em outras partes da
+                        instalação usados para suportar seu poder.
+                    </p>
+                    <p>
+                        Se tentarem atacar o núcleo diretamente não vão ter
+                        chance alguma, mas se destruírem os módulos ela não terá
+                        todos os seus recursos e talvez seja possível ganhar
+                        essa batalha.
+                    </p>
+                    <p>
+                        Além disso existe uma sala na sede onde items muito
+                        poderosos são guardados, é um cofre. Eu tenho a senha
+                        para ele, isso deve ajudar também. A senha é 35168542.
+                    </p>
+                    <p>
+                        Contate o grupo, é nossa única chance.
+                    </p>
                     <br />
                 </div>
                 <div className="flex items-center justify-center pt-8">
                     <Link
                         className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-4xl h-16 px-5"
-                        href="/home"
+                        href="/contatar"
                     >
                         <img
                             className=""
@@ -64,7 +82,7 @@ const Tutorial = () => {
                             width={80}
                             height={80}
                         />
-                        Explorar
+                        Contatar
                     </Link>
                 </div>
             </div>

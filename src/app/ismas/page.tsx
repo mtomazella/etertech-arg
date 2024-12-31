@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from 'react'
 const Tutorial = () => {
     const { enigmaNodes, updateEnigma } = useEnigma()
     const enigma = useMemo(
-        () => enigmaNodes.find(node => node.id === 'plan'),
+        () => enigmaNodes.find(node => node.id === 'ismas'),
         [enigmaNodes]
     )
 
@@ -24,7 +24,7 @@ const Tutorial = () => {
 
     return (
         <main className="flex w-full h-full flex-col items-center justify-center">
-            <div className="w-1/4">
+            <div className="w-1/2">
                 <div className="flex items-center justify-center pb-8">
                     <Link href="/home">
                         <img
@@ -44,13 +44,28 @@ const Tutorial = () => {
                         fontStyle: 'normal',
                     }}
                 >
-                    <p>Ah, vejo que finalmente acordou. Que bom.</p>
                     <p>
-                        Agora que se lembra o que fizeram com você imagino que
-                        quer destruí-los, certo?
+                        Chamar Ismas de um Conectado é um insulto, é como
+                        comparar uma baleia a uma formiga dizendo que são ambos
+                        animais, mas essencialmente esse termo pode ser usado,
+                        ela possui todas as capacidades de um Conectado, mas é
+                        muito mais poderosa que qualquer outro.
                     </p>
-                    <p>Não se preocupe, eu posso te ajudar com isso.</p>
-                    <p>Apenas continue seguindo minha trilha.</p>
+                    <p>
+                        Pouco tempo depois de Jizno Daysworn criar Étertech ela
+                        também criou Ismas e ambas trabalharam juntas
+                        aperfeiçoando a tecnologia eventualmente fundando a
+                        Manacorp. Ismas nunca foi mostrada publicamente, um
+                        desejo dela mesma. Provavelmente já planejava o que
+                        estava por vir e acreditava que isso a atrapalharia.
+                    </p>
+                    <p>
+                        Eventualmente, quando Manacorp já era uma grande
+                        empresa, Ismas capturou Jizno e tomou controle completo,
+                        transformando Manacorp no monstro que é hoje, aumentando
+                        seu poder sobre toda a sociedade a fim de ter recursos
+                        para concluir seu objetivo.
+                    </p>
                     <br />
                 </div>
                 <div className="flex items-center justify-center pt-8">

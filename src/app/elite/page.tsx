@@ -1,5 +1,6 @@
 'use client'
 
+import Sheet from '@/components/sheet'
 import { useEnigma } from '@/hooks/useEnigma'
 import Link from 'next/link'
 import React, { useEffect, useMemo } from 'react'
@@ -7,7 +8,7 @@ import React, { useEffect, useMemo } from 'react'
 const Tutorial = () => {
     const { enigmaNodes, updateEnigma } = useEnigma()
     const enigma = useMemo(
-        () => enigmaNodes.find(node => node.id === 'plan'),
+        () => enigmaNodes.find(node => node.id === 'elite'),
         [enigmaNodes]
     )
 
@@ -24,7 +25,7 @@ const Tutorial = () => {
 
     return (
         <main className="flex w-full h-full flex-col items-center justify-center">
-            <div className="w-1/4">
+            <div className="w-1/2">
                 <div className="flex items-center justify-center pb-8">
                     <Link href="/home">
                         <img
@@ -36,23 +37,30 @@ const Tutorial = () => {
                         />
                     </Link>
                 </div>
-                <div
-                    className="w-full text-center text-2xl"
-                    style={{
-                        fontFamily: 'Tomorrow, serif',
-                        fontWeight: 700,
-                        fontStyle: 'normal',
-                    }}
-                >
-                    <p>Ah, vejo que finalmente acordou. Que bom.</p>
-                    <p>
-                        Agora que se lembra o que fizeram com você imagino que
-                        quer destruí-los, certo?
-                    </p>
-                    <p>Não se preocupe, eu posso te ajudar com isso.</p>
-                    <p>Apenas continue seguindo minha trilha.</p>
+                <Sheet showIcon>
+                    <p>Projeto Conectado,</p>
                     <br />
-                </div>
+                    <p>
+                        Agradecemos a contribuição com as informações
+                        descobertas em suas pesquisas, estou escrevendo para
+                        informar de desenvolvimentos recentes em nosso projeto.
+                    </p>
+                    <p>
+                        A partir dos dados fornecidos fomos capazes de superar
+                        um bloqueio grande na construção do interface de conexão
+                        entre os usuários e seus trajes. Além disso fomos
+                        capazes de inverter o fluxo de informação, permitindo
+                        que a mente do usuário seja controlada até certo ponto.
+                    </p>
+                    <p>Nada disso seria possível sem a sua ajuda.</p>
+                    <br />
+                    <p className="text-right">
+                        Continuem o ótimo trabalho,
+                        <br />
+                        Dr. A. L.
+                    </p>
+                </Sheet>
+                <br />
                 <div className="flex items-center justify-center pt-8">
                     <Link
                         className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-4xl h-16 px-5"
